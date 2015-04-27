@@ -1,9 +1,18 @@
 <!doctype html>
 <html>
     <head>
-        <title>Socket.IO chat</title>
         <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+        <title>Socket.IO chat</title>
+
         <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+        <script src="/bower_components/webcomponentsjs/webcomponents.js"></script>
+
+        <link rel="import" href="/bower_components/polymer/polymer.html">
+        <link rel="import" href="/bower_components/core-icon/core-icon.html">
+        <link rel="import" href="/bower_components/paper-input/paper-input-decorator.html">
+        <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+        <link rel="import" href="/bower_components/paper-shadow/paper-shadow.html">
 
         <style>
             * {
@@ -15,34 +24,32 @@
                 font: 13px Helvetica, Arial;
             }
             form {
-                background: #000;
-                padding: 3px;
                 position: fixed;
                 bottom: 0;
                 width: 100%;
             }
-            form input {
-                border: 0;
+            form paper-input-decorator {
+                position: fixed;
+                bottom: 0;
                 padding: 10px;
                 width: 90%;
                 margin-right: .5%;
             }
-            form button {
-                width: 9%;
-                background: rgb(130, 224, 255);
-                border: none;
-                padding: 10px;
+            form paper-icon-button {
+                position: fixed;
+                bottom: 0;
+                right: 0;
+                margin: 0 20px 10px 0;
             }
             #messages {
-                list-style-type: none;
-                margin: 0;
-                padding: 0;
+                display: flex;
+                flex-direction: column;
             }
-            #messages li {
-                padding: 5px 10px;
-            }
-            #messages li:nth-child(odd) {
-                background: #eee;
+            paper-shadow {
+                margin: 5px;
+                padding: 10px;
+                float: left;
+                align-self: flex-start;
             }
         </style>
 
@@ -52,6 +59,7 @@
                 var inputNode = document.getElementById("text");
                 var messagesList = document.getElementById("messages");
                 var textForm = document.getElementById("textForm");
+                var button = document.getElementById("button");
 
                 function onSubmit(evt) {
                     socket.emit('chat message', inputNode.value);
@@ -60,21 +68,23 @@
                 }
 
                 textForm.addEventListener('submit', onSubmit);
+                button.addEventListener('click', onSubmit);
 
                 socket.on('chat message', function(msg) {
-                    var li = document.createElement('li');
-                    li.innerHTML = msg;
-                    messagesList.appendChild(li);
+                    var shadow = document.createElement('paper-shadow');
+                    shadow.innerHTML = msg;
+                    messagesList.appendChild(shadow);
                 });
             }
         </script>
     </head>
-
     <body onLoad="onLoad()">
-        <ul id="messages"></ul>
+        <div id="messages"></div>
         <form id="textForm" action="">
-            <input id="text" autocomplete="off" autofocus/>
-            <button>Send</button>
+            <paper-input-decorator id="decorator" label="Enter message to send">
+                <input id="text" autocomplete="off" autofocus/>
+            </paper-input-decorator>
+            <paper-icon-button id="button" icon="send"></paper-icon-button>
         </form>
     </body>
 </html>
