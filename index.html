@@ -10,46 +10,18 @@
 
         <link rel="import" href="/bower_components/polymer/polymer.html">
         <link rel="import" href="/bower_components/core-icon/core-icon.html">
-        <link rel="import" href="/bower_components/paper-input/paper-input-decorator.html">
+        <link rel="import" href="/bower_components/paper-input/paper-input.html">
         <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
         <link rel="import" href="/bower_components/paper-shadow/paper-shadow.html">
 
         <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-            body {
-                font: 13px Helvetica, Arial;
-            }
-            form {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-            }
-            form paper-input-decorator {
-                position: fixed;
-                bottom: 0;
+            paper-input {
                 padding: 10px;
-                width: 90%;
-                margin-right: .5%;
-            }
-            form paper-icon-button {
-                position: fixed;
-                bottom: 0;
-                right: 0;
-                margin: 0 20px 10px 0;
-            }
-            #messages {
-                display: flex;
-                flex-direction: column;
             }
             paper-shadow {
                 margin: 5px;
                 padding: 10px;
                 float: left;
-                align-self: flex-start;
             }
         </style>
 
@@ -58,17 +30,21 @@
                 var socket = io();
                 var inputNode = document.getElementById("text");
                 var messagesList = document.getElementById("messages");
-                var textForm = document.getElementById("textForm");
                 var button = document.getElementById("button");
 
-                function onSubmit(evt) {
+                function sendMessage() {
                     socket.emit('chat message', inputNode.value);
                     inputNode.value = "";
-                    evt.preventDefault();
                 }
 
-                textForm.addEventListener('submit', onSubmit);
-                button.addEventListener('click', onSubmit);
+                function onKeypress(evt) {
+                    if (evt.which == 13) {
+                        sendMessage();
+                    }
+                }
+
+                inputNode.addEventListener('keypress', onKeypress);
+                button.addEventListener('click', sendMessage);
 
                 socket.on('chat message', function(msg) {
                     var shadow = document.createElement('paper-shadow');
@@ -78,13 +54,13 @@
             }
         </script>
     </head>
-    <body onLoad="onLoad()">
-        <div id="messages"></div>
-        <form id="textForm" action="">
-            <paper-input-decorator id="decorator" label="Enter message to send">
-                <input id="text" autocomplete="off" autofocus/>
-            </paper-input-decorator>
-            <paper-icon-button id="button" icon="send"></paper-icon-button>
-        </form>
+    <body onLoad="onLoad()" fullbleed unresolved vertical layout>
+        <div id="messages" flex vertical layout start></div>
+        <div horizontal layout center>
+            <paper-input id="text" label="Enter message to send" flex>
+            </paper-input>
+            <paper-icon-button id="button" icon="send">
+            </paper-icon-button>
+        </div>
     </body>
 </html>
