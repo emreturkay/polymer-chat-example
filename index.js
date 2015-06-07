@@ -8,6 +8,7 @@ app.get('/', function(req, res) {
 });
 
 app.use("/bower_components", express.static(__dirname + "/bower_components"));
+app.use("/elements", express.static(__dirname + "/elements"));
 
 io.on('connection', function(socket) {
     socket.on('chat message', function(msg) {

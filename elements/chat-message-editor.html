@@ -1,0 +1,52 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/core-icon/core-icon.html">
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+
+<polymer-element name="chat-message-editor" constructor="ChatMessageEditor">
+
+<template>
+    <style>
+        paper-input {
+            padding: 10px;
+        }
+    </style>
+
+    <div id="container" horizontal layout center>
+        <paper-input
+            id="input"
+            label="Enter message to send"
+            on-keypress="{{keyPressed}}"
+            flex>
+        </paper-input>
+        <paper-icon-button
+            id="button"
+            icon="send"
+            on-tap="{{buttonTapped}}">
+        </paper-icon-button>
+    </div>
+</template>
+
+<script>
+    Polymer({
+        sendMessage: function() {
+            this.asyncFire("message",
+                {
+                    message: this.$.input.value
+                });
+            this.$.input.value = "";
+        },
+        keyPressed: function(event, detail, sender) {
+            if (event.which == 13) {
+                this.sendMessage();
+                event.preventDefault();
+            }
+        },
+        buttonTapped: function(event, detail, sender) {
+            this.sendMessage();
+            event.preventDefault();
+        }
+    });
+</script>
+
+</polymer-element>

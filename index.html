@@ -9,15 +9,10 @@
         <script src="/bower_components/webcomponentsjs/webcomponents.js"></script>
 
         <link rel="import" href="/bower_components/polymer/polymer.html">
-        <link rel="import" href="/bower_components/core-icon/core-icon.html">
-        <link rel="import" href="/bower_components/paper-input/paper-input.html">
-        <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
         <link rel="import" href="/bower_components/paper-shadow/paper-shadow.html">
+        <link rel="import" href="/elements/chat-message-editor.html">
 
         <style>
-            paper-input {
-                padding: 10px;
-            }
             paper-shadow {
                 margin: 5px;
                 padding: 10px;
@@ -28,23 +23,14 @@
         <script>
             function onLoad() {
                 var socket = io();
-                var inputNode = document.getElementById("text");
                 var messagesList = document.getElementById("messages");
-                var button = document.getElementById("button");
+                var editor = document.getElementById("editor");
 
-                function sendMessage() {
-                    socket.emit('chat message', inputNode.value);
-                    inputNode.value = "";
+                function sendMessage(ev) {
+                    socket.emit('chat message', ev.detail.message);
                 }
 
-                function onKeypress(evt) {
-                    if (evt.which == 13) {
-                        sendMessage();
-                    }
-                }
-
-                inputNode.addEventListener('keypress', onKeypress);
-                button.addEventListener('click', sendMessage);
+                editor.addEventListener('message', sendMessage);
 
                 socket.on('chat message', function(msg) {
                     var shadow = document.createElement('paper-shadow');
@@ -56,11 +42,6 @@
     </head>
     <body onLoad="onLoad()" fullbleed unresolved vertical layout>
         <div id="messages" flex vertical layout start></div>
-        <div horizontal layout center>
-            <paper-input id="text" label="Enter message to send" flex>
-            </paper-input>
-            <paper-icon-button id="button" icon="send">
-            </paper-icon-button>
-        </div>
+        <chat-message-editor id="editor"></chat-message-editor>
     </body>
 </html>
