@@ -1,0 +1,23 @@
+<link rel="import" href="/bower_components/paper-shadow/paper-shadow.html">
+
+<polymer-element name="chat-message-view" constructor="ChatMessageView">
+    <template>
+        <style>
+            paper-shadow {
+                margin: 5px;
+                padding: 10px;
+                float: left;
+            }
+        </style>
+        <div id="messages" vertical layout start></div>
+    </template>
+    <script>
+        Polymer({
+            addMessage: function(msg) {
+                var shadow = document.createElement('paper-shadow');
+                shadow.innerHTML = msg;
+                this.$.messages.appendChild(shadow);
+            }
+        });
+    </script>
+</polymer-element>

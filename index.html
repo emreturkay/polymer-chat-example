@@ -9,22 +9,14 @@
         <script src="/bower_components/webcomponentsjs/webcomponents.js"></script>
 
         <link rel="import" href="/bower_components/polymer/polymer.html">
-        <link rel="import" href="/bower_components/paper-shadow/paper-shadow.html">
         <link rel="import" href="/elements/chat-message-editor.html">
-
-        <style>
-            paper-shadow {
-                margin: 5px;
-                padding: 10px;
-                float: left;
-            }
-        </style>
+        <link rel="import" href="/elements/chat-message-view.html">
 
         <script>
             function onLoad() {
                 var socket = io();
-                var messagesList = document.getElementById("messages");
                 var editor = document.getElementById("editor");
+                var view = document.getElementById("view");
 
                 function sendMessage(ev) {
                     socket.emit('chat message', ev.detail.message);
@@ -33,15 +25,13 @@
                 editor.addEventListener('message', sendMessage);
 
                 socket.on('chat message', function(msg) {
-                    var shadow = document.createElement('paper-shadow');
-                    shadow.innerHTML = msg;
-                    messagesList.appendChild(shadow);
+                    view.addMessage(msg);
                 });
             }
         </script>
     </head>
     <body onLoad="onLoad()" fullbleed unresolved vertical layout>
-        <div id="messages" flex vertical layout start></div>
+        <chat-message-view id="view" flex></chat-message-view>
         <chat-message-editor id="editor"></chat-message-editor>
     </body>
 </html>
