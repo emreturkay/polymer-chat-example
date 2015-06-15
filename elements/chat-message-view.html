@@ -9,14 +9,16 @@
                 float: left;
             }
         </style>
-        <div id="messages" vertical layout start></div>
+        <div vertical layout start>
+            <template repeat="{{message in messages}}">
+                <paper-shadow>{{message}}</paper-shadow>
+            </template>
+        </div>
     </template>
     <script>
         Polymer({
-            addMessage: function(msg) {
-                var shadow = document.createElement('paper-shadow');
-                shadow.innerHTML = msg;
-                this.$.messages.appendChild(shadow);
+            ready: function() {
+                this.messages = [];
             }
         });
     </script>

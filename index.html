@@ -25,7 +25,7 @@
                 editor.addEventListener('message', sendMessage);
 
                 socket.on('chat message', function(msg) {
-                    view.addMessage(msg);
+                    view.messages.push(msg);
                 });
             }
         </script>
