@@ -5,33 +5,12 @@
 
         <title>Socket.IO chat</title>
 
-        <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
         <script src="/bower_components/webcomponentsjs/webcomponents.js"></script>
 
         <link rel="import" href="/bower_components/polymer/polymer.html">
-        <link rel="import" href="/elements/chat-message-editor.html">
-        <link rel="import" href="/elements/chat-message-view.html">
-
-        <script>
-            function onLoad() {
-                var socket = io();
-                var editor = document.getElementById("editor");
-                var view = document.getElementById("view");
-
-                function sendMessage(ev) {
-                    socket.emit('chat message', ev.detail.message);
-                }
-
-                editor.addEventListener('message', sendMessage);
-
-                socket.on('chat message', function(msg) {
-                    view.messages.push(msg);
-                });
-            }
-        </script>
+        <link rel="import" href="/elements/chat-app.html">
     </head>
-    <body onLoad="onLoad()" fullbleed unresolved vertical layout>
-        <chat-message-view id="view" flex></chat-message-view>
-        <chat-message-editor id="editor"></chat-message-editor>
+    <body fullbleed unresolved>
+        <chat-app></chat-app>
     </body>
 </html>

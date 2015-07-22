@@ -1,0 +1,43 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/elements/chat-message-editor.html">
+<link rel="import" href="/elements/chat-message-view.html">
+
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+
+<polymer-element name="chat-app" constructor="ChatApp">
+    <template>
+        <style>
+            :host {
+                height: 100%;
+            }
+            #container {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+        <div id="container" layout vertical>
+            <chat-message-view id="view" model="{{model}}" flex></chat-message-view>
+            <chat-message-editor id="editor"></chat-message-editor>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            model: [],
+            ready: function() {
+                this.socket = io();
+                var self = this;
+
+                function sendMessage(ev) {
+                    self.socket.emit('chat message', ev.detail.message);
+                }
+
+                this.$.editor.addEventListener('message', sendMessage);
+
+                this.socket.on('chat message', function(msg) {
+                    self.model.push(msg);
+                });
+            }
+        });
+    </script>
+</polymer-element>
